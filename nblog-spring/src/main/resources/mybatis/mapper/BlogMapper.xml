@@ -3,19 +3,24 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="ml.nkqnkq.mapper.BlogMapper">
-    <select id="queryUserList" resultType="User">
-        select * from m_user
-    </select>
-    <select id="selectPage" resultType="List">
-        select * from m_user
-    </select>
     <select id="getById" resultType="Blog">
         select * from m_blog where id=#{id}
     </select>
-    <select id="getByUsername" resultType="User" parameterType="String">
-        select * from m_user where username=#{username}
+    <select id="selectPage" resultType="List">
+        select * from m_blog
     </select>
-    <delete id="delUser" parameterType="int">
-        delete from m_user where id=#{id}
+    <delete id="delBlog" parameterType="int">
+        delete from m_blog where id=#{id}
     </delete>
+    <update id="updateBlog" parameterType="Blog">
+        update m_blog set
+        title=#{title},description=#{description},
+        content=#{content},created=#{created},status=#{status}
+        where id=#{id}
+    </update>
+    <insert id="addBlog" parameterType="Blog">
+        insert into m_blog
+        values
+        (#{id},#{user_id},#{title},#{description},#{content},#{created},#{status})
+    </insert>
 </mapper>

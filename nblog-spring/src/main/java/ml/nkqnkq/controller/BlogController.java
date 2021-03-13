@@ -1,11 +1,11 @@
 package ml.nkqnkq.controller;
 
 import cn.hutool.core.bean.BeanUtil;
-import com.github.pagehelper.IPage;
 import com.github.pagehelper.Page;
 import ml.nkqnkq.lang.Result;
 import ml.nkqnkq.pojo.Blog;
 import ml.nkqnkq.service.BlogService;
+import ml.nkqnkq.utils.PageResultUtils;
 import ml.nkqnkq.utils.ShiroUtil;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,8 +24,8 @@ public class BlogController {
     public Result blogs(@RequestParam(defaultValue = "1") Integer currentPage) {
         if(currentPage == null || currentPage < 1) currentPage = 1;
         Page page = new Page(currentPage, 5);
-        IPage pageData = blogService.page(page, new QueryWrapper<Blog>().orderByDesc("created"));
-        return Result.succ(pageData);
+        PageResultUtils result = blogService.findPage(page);
+        return Result.succ(result);
     }
 
     @GetMapping("/blog/{id}")
@@ -40,18 +40,21 @@ public class BlogController {
     public Result edit(@Validated @RequestBody Blog blog) {
         System.out.println(blog.toString());
         Blog temp = null;
+        // 修改
         if(blog.getId() != null) {
             temp = blogService.getById(blog.getId());
             Assert.isTrue(temp.getUser_id() == ShiroUtil.getProfile().getId(), "没有权限编辑");
+            BeanUtil.copyProperties(blog, temp, "id", "userId", "created", "status");
+            blogService.updateBlog(temp);
         } else {
+            // 新建
             temp = new Blog();
             temp.setUser_id(ShiroUtil.getProfile().getId());
             temp.setCreated(LocalDateTime.now());
             temp.setStatus(0);
+            BeanUtil.copyProperties(blog, temp, "id", "userId", "created", "status");
+            blogService.addBlog(temp);
         }
-        BeanUtil.copyProperties(blog, temp, "id", "userId", "created", "status");
-        blogService.saveOrUpdate(temp);
-
         return Result.succ(null);
     }
 }

@@ -12,4 +12,8 @@ public interface BlogMapper {
     Blog getById(Long id);
 
     List<Blog> selectPage();
+
+    int updateBlog(Blog blog);
+
+    int addBlog(Blog blog);
 }

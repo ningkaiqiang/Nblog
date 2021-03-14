@@ -38,21 +38,22 @@ public class BlogController {
     @RequiresAuthentication
     @PostMapping("/blog/edit")
     public Result edit(@Validated @RequestBody Blog blog) {
-        System.out.println(blog.toString());
+//        System.out.println(blog.toString());
         Blog temp = null;
         // 修改
         if(blog.getId() != null) {
             temp = blogService.getById(blog.getId());
             Assert.isTrue(temp.getUser_id() == ShiroUtil.getProfile().getId(), "没有权限编辑");
-            BeanUtil.copyProperties(blog, temp, "id", "userId", "created", "status");
+            BeanUtil.copyProperties(blog, temp, "id", "user_id", "created", "status");
             blogService.updateBlog(temp);
         } else {
             // 新建
             temp = new Blog();
-            temp.setUser_id(ShiroUtil.getProfile().getId());
+            Long id = ShiroUtil.getProfile().getId();
+            temp.setUser_id(id);
             temp.setCreated(LocalDateTime.now());
             temp.setStatus(0);
-            BeanUtil.copyProperties(blog, temp, "id", "userId", "created", "status");
+            BeanUtil.copyProperties(blog, temp, "id", "user_id", "created", "status");
             blogService.addBlog(temp);
         }
         return Result.succ(null);

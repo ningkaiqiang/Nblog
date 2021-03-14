@@ -51,10 +51,10 @@
         const _this = this
         _this.$axios.get("/blogs?currentPage=" + currentPage).then(res => {
           console.log(res)
-          _this.blogs = res.data.data.records
-          _this.currentPage = res.data.data.current
-          _this.total = res.data.data.total
-          _this.pageSize = res.data.data.size
+          _this.blogs = res.data.data.content
+          _this.currentPage = res.data.data.pageNum
+          _this.total = res.data.data.totalPages
+          _this.pageSize = res.data.data.pageSize
 
         })
       }

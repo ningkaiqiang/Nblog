@@ -6,7 +6,7 @@
     <select id="getById" resultType="Blog">
         select * from m_blog where id=#{id}
     </select>
-    <select id="selectPage" resultType="List">
+    <select id="selectPage" resultType="Blog">
         select * from m_blog
     </select>
     <delete id="delBlog" parameterType="int">
@@ -21,6 +21,6 @@
     <insert id="addBlog" parameterType="Blog">
         insert into m_blog
         values
-        (#{id},#{user_id},#{title},#{description},#{content},#{created},#{status})
+        (null,#{user_id},#{title},#{description},#{content},#{created},#{status})
     </insert>
 </mapper>

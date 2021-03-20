@@ -11,7 +11,6 @@
 
 - 个人文章分页展示✅
 - 支持MarkDown编辑、浏览✅
-- RESTful API 风格的 API 接口✅
 - 前后端分离开发✅
 - Shiro + JWT 权限认证✅
 
